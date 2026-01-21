@@ -1,0 +1,7 @@
+﻿name: PR Pipeline
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml

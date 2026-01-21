@@ -1,7 +1,7 @@
 ﻿name: Reusable CI Workflow
 
 on:
-  workflow_call:           # ← TO JEST WAŻNE! Reusable musi mieć to
+  workflow_call: 
     inputs:
       environment:
         required: false
@@ -13,39 +13,33 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    # 1. Pobierz kod
-    - name: ⬇️ Checkout code
+    
+    - name: Checkout code
       uses: actions/checkout@v4
     
-    # 2. Setup Node.js
-    - name: ⚙️ Setup Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
     
-    # 3. Instaluj zależności
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: npm ci
     
-    # 4. Build aplikacji
-    - name: 🏗️ Build application
+    - name: Build application
       run: npm run build
     
-    # 5. CUSTOM GITHUB ACTION (dla 5.0)
-    - name: 🛠️ My Custom GitHub Action
+    - name: My Custom GitHub Action
       id: custom-check
       uses: ./.github/actions/docker-check
       with:
         environment: '${{ inputs.environment }}'
     
-    # 6. Pokaż wynik custom action
-    - name: 📋 Custom Action Result
+    - name: Custom Action Result
       shell: bash
       run: |
         echo "Custom action status: ${{ steps.custom-check.outputs.health-status }}"
         echo "Environment: ${{ inputs.environment }}"
     
-    # 7. Final
-    - name: ✅ Success
-      run: echo "🎉 Reusable workflow completed!"
+    - name: Success
+      run: echo "Reusable workflow completed!"

@@ -1,0 +1,44 @@
+name: 'Docker Health Check'
+description: 'My custom GitHub Action for DevOps project'
+
+inputs:
+  environment:
+    description: 'Environment name'
+    required: false
+    default: 'production'
+
+outputs:
+  health-status:
+    description: 'Health check result'
+    value: ${{ steps.check.outputs.status }}
+
+runs:
+  using: 'composite'
+  
+  steps:
+    - name: Check Docker
+      id: check
+      shell: bash
+      run: |
+        echo "CUSTOM GITHUB ACTION"
+        echo "Author: Vitoria2525"
+        echo "Project: DevOps Weather App"
+        echo "Date: $(date)"
+        echo ""
+        echo "Checking Docker..."
+        
+        if command -v docker &> /dev/null; then
+          echo "Docker is available!"
+          echo "Version: $(docker --version)"
+          echo "status=healthy" >> $GITHUB_OUTPUT
+        else
+          echo "Docker not found"
+          echo "status=unavailable" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Show result
+      shell: bash
+      run: |
+        echo ""
+        echo "ACTION COMPLETED"
+        echo "Custom action path: .github/actions/docker-check/"
